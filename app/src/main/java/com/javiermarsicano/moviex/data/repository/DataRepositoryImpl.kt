@@ -8,13 +8,13 @@ import io.reactivex.Single
 class DataRepositoryImpl(private val moviesService: MoviesService): DataRepository {
 
     companion object {
-        const val BASE_URL = "https://api.themoviedb.org/3/movie"
+        const val BASE_URL = "https://api.themoviedb.org/"
     }
 
     private val cachedResults: ArrayList<MovieResult> = arrayListOf()
 
-    override fun searchRepositories(query: String): Single<List<MovieResult>> {
-        return moviesService.getPopular(query)
+    override fun getPopular(query: String): Single<List<MovieResult>> {
+        return moviesService.getPopular("13c5955def4848143ee749a3a98b1f0e","en-US",1)
                 .map { it.mResults }
 
     }

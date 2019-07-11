@@ -5,7 +5,7 @@ import io.reactivex.Single
 
 interface DataRepository {
 
-    fun searchRepositories(query: String): Single<List<MovieResult>>
+    fun getPopular(query: String): Single<List<MovieResult>>
 
     fun getTopRatedMovies(query: String): Single<List<MovieResult>>
 
