@@ -4,32 +4,30 @@ package com.javiermarsicano.moviex.data.models
 import com.google.gson.annotations.SerializedName
 
 data class MovieResult(
-    @SerializedName("adult")
-    val mAdult: Boolean,
     @SerializedName("backdrop_path")
-    val mBackdropPath: String,
+    val backdropPath: String,
     @SerializedName("genre_ids")
-    val mGenreIds: List<Int>,
+    val genreIds: List<Int>,
     @SerializedName("id")
-    val mId: Int,
+    val id: Int,
     @SerializedName("original_language")
-    val mOriginalLanguage: String,
+    val originalLanguage: String,
     @SerializedName("original_title")
-    val mOriginalTitle: String,
+    val originalTitle: String,
     @SerializedName("overview")
-    val mOverview: String,
+    val overview: String,
     @SerializedName("popularity")
-    val mPopularity: Double,
+    val popularity: Double,
     @SerializedName("poster_path")
-    val mPosterPath: String,
+    val posterPath: String,
     @SerializedName("release_date")
-    val mReleaseDate: String,
+    val releaseDate: String,
     @SerializedName("title")
-    val mTitle: String,
+    val title: String,
     @SerializedName("video")
-    val mVideo: Boolean,
+    val video: Boolean,
     @SerializedName("vote_average")
-    val mVoteAverage: Double,
+    val voteAverage: Double,
     @SerializedName("vote_count")
-    val mVoteCount: Int
+    val voteCount: Int
 )
