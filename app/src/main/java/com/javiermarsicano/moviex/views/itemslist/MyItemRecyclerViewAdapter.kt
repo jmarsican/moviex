@@ -16,6 +16,7 @@ import com.javiermarsicano.moviex.data.models.MovieResult
 
 import com.javiermarsicano.moviex.views.itemslist.ItemsFragment.OnListInteractionListener
 import kotlinx.android.synthetic.main.entry_item.view.entry_comments
+import kotlinx.android.synthetic.main.entry_item.view.entry_date
 import kotlinx.android.synthetic.main.entry_item.view.entry_description
 import kotlinx.android.synthetic.main.entry_item.view.entry_image
 import kotlinx.android.synthetic.main.entry_item.view.entry_title
@@ -77,6 +78,7 @@ class MyItemRecyclerViewAdapter(
         holder.mDescription.text = item.overview
         holder.mComments.text = mContext.getString(R.string.comments_indicator, item.voteCount)
         holder.mImage.setImageUrl(BASE_POSTER_URL+item.backdropPath,crossFade = true, error = R.mipmap.ic_launcher, placeholder = R.mipmap.ic_launcher_round)
+        holder.mDate.text = item.releaseDate
 
         with(holder.mView) {
             tag = item
@@ -91,6 +93,7 @@ class MyItemRecyclerViewAdapter(
         val mDescription: TextView = mView.entry_description
         val mComments: TextView = mView.entry_comments
         val mImage: ImageView = mView.entry_image
+        val mDate: TextView = mView.entry_date
 
         override fun toString(): String {
             return super.toString() + " '" + mDescription.text + "'"

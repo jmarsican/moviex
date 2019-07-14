@@ -30,15 +30,18 @@
             app:layout_constraintLeft_toLeftOf="parent"
             tools:src="@mipmap/ic_launcher"/>
 
-    <ImageView
-            android:id="@+id/entry_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/entry_header_margin"
-            android:layout_marginBottom="@dimen/entry_header_margin"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@android:drawable/ic_notification_overlay"
-            app:layout_constraintTop_toTopOf="parent"/>
+    <com.like.LikeButton
+        android:id="@+id/entry_status"
+        app:icon_type="star"
+        app:icon_size="15dp"
+        app:liked="false"
+        app:anim_scale_factor="2"
+        app:is_enabled="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/entry_header_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
             android:id="@+id/entry_go_btn"
@@ -51,17 +54,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@android:drawable/ic_media_play"/>
 
-    <Button
-            android:id="@+id/entry_dismiss_btn"
+    <TextView
+            android:id="@+id/entry_date"
             android:textAllCaps="false"
             android:textColor="@color/colorBackground"
-            android:text="Dismiss Post"
+            tools:text="2019-01-01"
             android:layout_marginTop="5dp"
             android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="11sp"
-            android:drawableStart="@android:drawable/ic_lock_lock"
             app:layout_constraintTop_toBottomOf="@id/entry_image"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -77,7 +79,7 @@
             android:textSize="11sp"
             app:layout_constraintTop_toBottomOf="@id/entry_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/entry_dismiss_btn"/>
+            app:layout_constraintStart_toEndOf="@id/entry_date"/>
 
     <TextView
             android:id="@+id/entry_description"
