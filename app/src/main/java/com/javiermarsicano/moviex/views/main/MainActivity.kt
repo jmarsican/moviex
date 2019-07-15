@@ -32,4 +32,8 @@ class MainActivity : BaseMVPActivity<MainView, MainPresenter>(), MainView, Items
         setLoaderView(loaderView)
     }
 
+    override fun openLink(link: String) {
+        TODO("not implemented")
+    }
+
 }

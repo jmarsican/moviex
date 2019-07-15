@@ -44,7 +44,7 @@ class ItemsFragment : BaseMVPFragment<ItemsView, ItemsPresenter>(), ItemsView {
         moviesList.layoutManager = LinearLayoutManager(context)
         mAdapter = MyItemRecyclerViewAdapter(mutableListOf(), object : OnListInteractionListener {
             override fun onListInteraction(item: MovieResult?) {
-                if (item != null) openLink(item.posterPath)
+                if (item != null) getPresenter().getVideo(item)
             }
         })
         moviesList.adapter = mAdapter

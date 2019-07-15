@@ -18,6 +18,7 @@ import com.javiermarsicano.moviex.views.itemslist.ItemsFragment.OnListInteractio
 import kotlinx.android.synthetic.main.entry_item.view.entry_comments
 import kotlinx.android.synthetic.main.entry_item.view.entry_date
 import kotlinx.android.synthetic.main.entry_item.view.entry_description
+import kotlinx.android.synthetic.main.entry_item.view.entry_go_btn
 import kotlinx.android.synthetic.main.entry_item.view.entry_image
 import kotlinx.android.synthetic.main.entry_item.view.entry_title
 
@@ -86,7 +87,7 @@ class MyItemRecyclerViewAdapter(
         holder.mImage.setImageUrl(BASE_POSTER_URL+item.backdropPath,crossFade = true, error = R.mipmap.ic_launcher, placeholder = R.mipmap.ic_launcher_round)
         holder.mDate.text = item.releaseDate
 
-        with(holder.mView) {
+        with(holder.mGo) {
             tag = item
             setOnClickListener(mOnClickListener)
         }
@@ -100,6 +101,7 @@ class MyItemRecyclerViewAdapter(
         val mComments: TextView = mView.entry_comments
         val mImage: ImageView = mView.entry_image
         val mDate: TextView = mView.entry_date
+        val mGo: View = mView.entry_go_btn
 
         override fun toString(): String {
             return super.toString() + " '" + mDescription.text + "'"

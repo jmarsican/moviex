@@ -3,6 +3,7 @@ package com.javiermarsicano.moviex.data.repository
 import com.javiermarsicano.moviex.data.db.RepoDatabase
 import com.javiermarsicano.moviex.data.models.Category
 import com.javiermarsicano.moviex.data.models.MovieResult
+import com.javiermarsicano.moviex.data.models.VideoData
 import com.javiermarsicano.moviex.data.services.MoviesService
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -14,9 +15,14 @@ class DataRepositoryImpl(private val moviesService: MoviesService, private val d
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/"
+        const val VIDEOS_URL = "https://www.youtube.com/watch?v="
     }
 
     private val cachedResults: ArrayList<MovieResult> = arrayListOf()
+
+    override fun getVideo(id: String): Single<List<VideoData>> {
+        return moviesService.getVideos(id).map { it.results }
+    }
 
     override fun getPopular(): Single<List<MovieResult>> {
         return moviesService.getPopular(page = 1)

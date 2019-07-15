@@ -85,7 +85,7 @@ abstract class BaseMVPFragment<in V : MVPView, P : MVPPresenter<V>> : Fragment()
         if (activity != null) activity!!.hideKeyboard()
     }
 
-    protected fun openLink(link: String) {
+    override fun openLink(link: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(browserIntent)
     }

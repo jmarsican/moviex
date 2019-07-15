@@ -6,4 +6,5 @@ interface MVPView {
     fun onError(resId: Int)
     fun onError(message: String?)
     fun hideKeyboard()
+    fun openLink(link: String)
 }
