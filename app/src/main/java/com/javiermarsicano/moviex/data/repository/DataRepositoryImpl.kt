@@ -1,11 +1,12 @@
 package com.javiermarsicano.moviex.data.repository
 
+import com.javiermarsicano.moviex.data.db.RepoDatabase
 import com.javiermarsicano.moviex.data.models.MovieResult
 import com.javiermarsicano.moviex.data.services.MoviesService
 import io.reactivex.Single
 
 
-class DataRepositoryImpl(private val moviesService: MoviesService): DataRepository {
+class DataRepositoryImpl(private val moviesService: MoviesService, private val database: RepoDatabase): DataRepository {
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/"

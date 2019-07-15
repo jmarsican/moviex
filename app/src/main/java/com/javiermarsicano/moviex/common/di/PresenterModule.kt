@@ -1,6 +1,8 @@
 package com.javiermarsicano.moviex.common.di
 
 import android.app.Application
+import android.arch.persistence.room.Room
+import com.javiermarsicano.moviex.data.db.RepoDatabase
 import com.javiermarsicano.moviex.data.repository.DataRepository
 import com.javiermarsicano.moviex.data.repository.DataRepositoryImpl
 import com.javiermarsicano.moviex.data.services.MoviesService
@@ -48,7 +50,16 @@ class PresenterModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideRepository(service: MoviesService) : DataRepository {
-        return DataRepositoryImpl(service)
+    fun provideRepository(service: MoviesService, database: RepoDatabase) : DataRepository {
+        return DataRepositoryImpl(service, database)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabase() : RepoDatabase {
+        return Room
+                .databaseBuilder(application, RepoDatabase::class.java, "repodatabase.db")
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }
