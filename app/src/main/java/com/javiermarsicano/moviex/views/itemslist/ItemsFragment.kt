@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.javiermarsicano.moviex.MyApplication
 import com.javiermarsicano.moviex.R
+import com.javiermarsicano.moviex.common.animations.MyScaleInLeftAnimator
 import com.javiermarsicano.moviex.common.mvp.BaseMVPFragment
 import com.javiermarsicano.moviex.data.models.MovieResult
 import kotlinx.android.synthetic.main.fragment_item_list.btn_pop
@@ -47,6 +48,7 @@ class ItemsFragment : BaseMVPFragment<ItemsView, ItemsPresenter>(), ItemsView {
             }
         })
         moviesList.adapter = mAdapter
+        moviesList.itemAnimator = MyScaleInLeftAnimator()
 
         return view
     }
@@ -58,9 +60,18 @@ class ItemsFragment : BaseMVPFragment<ItemsView, ItemsPresenter>(), ItemsView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_pop.setOnClickListener{ getPresenter().getPopular() }
-        btn_top.setOnClickListener{ getPresenter().getTopRated() }
-        btn_upcoming.setOnClickListener { getPresenter().getUpcoming() }
+        btn_pop.setOnClickListener{
+            mAdapter.clear()
+            getPresenter().getPopular()
+        }
+        btn_top.setOnClickListener {
+            mAdapter.clear()
+            getPresenter().getTopRated()
+        }
+        btn_upcoming.setOnClickListener {
+            mAdapter.clear()
+            getPresenter().getUpcoming()
+        }
 
         if (savedInstanceState != null) {
             val previousItems = getPresenter().getCache()

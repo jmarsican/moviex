@@ -1,0 +1,63 @@
+package com.javiermarsicano.moviex.common.animations;
+
+
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.RecyclerView;
+import android.view.animation.Interpolator;
+
+public class MyScaleInLeftAnimator extends BaseItemAnimator {
+
+    private long lastRemoval;
+    private int removeCount;
+
+    public MyScaleInLeftAnimator() {
+        lastRemoval = 0;
+        removeCount = 0;
+    }
+
+    public MyScaleInLeftAnimator(Interpolator interpolator) {
+        mInterpolator = interpolator;
+        lastRemoval = 0;
+        removeCount = 0;
+    }
+
+    @Override protected void preAnimateRemoveImpl(RecyclerView.ViewHolder holder) {
+        ViewCompat.setPivotX(holder.itemView, 0);
+    }
+
+    @Override protected void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
+        long time = System.currentTimeMillis();
+        long d = time - lastRemoval;
+        if (d < 100) {
+            removeCount++;
+        } else {
+            removeCount = 0;
+        }
+        lastRemoval = time;
+        ViewCompat.animate(holder.itemView)
+                .scaleX(0)
+                .scaleY(0)
+                .setDuration(getRemoveDuration())
+                .setInterpolator(mInterpolator)
+                .setListener(new DefaultRemoveVpaListener(holder))
+                .setStartDelay(removeCount * 100)
+                .start();
+    }
+
+    @Override protected void preAnimateAddImpl(RecyclerView.ViewHolder holder) {
+        ViewCompat.setPivotX(holder.itemView, 0);
+        ViewCompat.setScaleX(holder.itemView, 0);
+        ViewCompat.setScaleY(holder.itemView, 0);
+    }
+
+    @Override protected void animateAddImpl(final RecyclerView.ViewHolder holder) {
+        ViewCompat.animate(holder.itemView)
+                .scaleX(1)
+                .scaleY(1)
+                .setDuration(getAddDuration())
+                .setInterpolator(mInterpolator)
+                .setListener(new BaseItemAnimator.DefaultAddVpaListener(holder))
+                .setStartDelay(getAddDelay(holder))
+                .start();
+    }
+}

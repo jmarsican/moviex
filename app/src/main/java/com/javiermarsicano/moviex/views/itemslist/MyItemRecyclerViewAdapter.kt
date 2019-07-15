@@ -63,6 +63,12 @@ class MyItemRecyclerViewAdapter(
             result.dispatchUpdatesTo(this)
     }
 
+    fun clear() {
+        val count = itemCount
+        mValues.clear()
+        notifyItemRangeRemoved(0, count);
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.entry_item, parent, false)
