@@ -37,7 +37,7 @@ data class MovieResult(
         @SerializedName("vote_count")
         val voteCount: Int,
 
-        val category: Int
+        var category: Int
 )
 
 enum class Category{

@@ -1,9 +1,13 @@
 package com.javiermarsicano.moviex.data.repository
 
 import com.javiermarsicano.moviex.data.db.RepoDatabase
+import com.javiermarsicano.moviex.data.models.Category
 import com.javiermarsicano.moviex.data.models.MovieResult
 import com.javiermarsicano.moviex.data.services.MoviesService
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 
 class DataRepositoryImpl(private val moviesService: MoviesService, private val database: RepoDatabase): DataRepository {
@@ -14,18 +18,67 @@ class DataRepositoryImpl(private val moviesService: MoviesService, private val d
 
     private val cachedResults: ArrayList<MovieResult> = arrayListOf()
 
-    override fun getPopular(query: String): Single<List<MovieResult>> {
-        return moviesService.getPopular("13c5955def4848143ee749a3a98b1f0e","en-US",1)
+    override fun getPopular(): Single<List<MovieResult>> {
+        return moviesService.getPopular(page = 1)
+                .doOnSuccess {
+                    val repo = it.mResults
+
+                    repo.forEach{ movie -> movie.category = Category.POPULAR.ordinal}
+
+                    saveToLocal(repo)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe{
+                                Timber.d("Stored results of popular")
+                            }
+                }
                 .map { it.mResults }
+                .onErrorResumeNext{ database.repoDao().getMovies(Category.POPULAR.ordinal) }
 
     }
 
-    override fun getTopRatedMovies(query: String): Single<List<MovieResult>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getTopRatedMovies(): Single<List<MovieResult>> {
+        return moviesService.getTop(page = 1)
+                .doOnSuccess {
+                    val repo = it.mResults
+
+                    repo.forEach{ movie -> movie.category = Category.TOP_RATED.ordinal}
+
+                    saveToLocal(repo)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe{
+                                Timber.d("Stored results of top rated")
+                            }
+                }
+                .map { it.mResults }
+                .onErrorResumeNext{ database.repoDao().getMovies(Category.TOP_RATED.ordinal) }
     }
 
-    override fun getUpcomingMovies(query: String): Single<List<MovieResult>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getUpcomingMovies(): Single<List<MovieResult>> {
+        return moviesService.getUpcoming(page = 1)
+                .doOnSuccess {
+                    val repo = it.mResults
+
+                    repo.forEach{ movie -> movie.category = Category.UPCOMING.ordinal}
+
+                    saveToLocal(repo)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe{
+                                Timber.d("Stored results of upcoming")
+                            }
+                }
+                .map { it.mResults }
+                .onErrorResumeNext{ database.repoDao().getMovies(Category.UPCOMING.ordinal) }
+    }
+
+    private fun saveToLocal(result: List<MovieResult>)  = Observable.fromCallable {
+        cachedResults.clear()
+        cachedResults.addAll(result)
+
+        database.repoDao()
+                .storeMovies(result)
     }
 
     override fun getCache(): List<MovieResult> = cachedResults

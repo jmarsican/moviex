@@ -11,6 +11,10 @@ import com.javiermarsicano.moviex.MyApplication
 import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.common.mvp.BaseMVPFragment
 import com.javiermarsicano.moviex.data.models.MovieResult
+import kotlinx.android.synthetic.main.fragment_item_list.btn_pop
+import kotlinx.android.synthetic.main.fragment_item_list.btn_top
+import kotlinx.android.synthetic.main.fragment_item_list.btn_upcoming
+import kotlinx.android.synthetic.main.fragment_item_list.view.list
 
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,15 +38,16 @@ class ItemsFragment : BaseMVPFragment<ItemsView, ItemsPresenter>(), ItemsView {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(layoutId(), container, false)
 
-        if (view is RecyclerView) {
-            view.layoutManager = LinearLayoutManager(context)
-            mAdapter = MyItemRecyclerViewAdapter(mutableListOf(), object : OnListInteractionListener {
-                override fun onListInteraction(item: MovieResult?) {
-                    if (item != null) openLink(item.posterPath)
-                }
-            })
-            view.adapter = mAdapter
-        }
+        val moviesList = view.list
+
+        moviesList.layoutManager = LinearLayoutManager(context)
+        mAdapter = MyItemRecyclerViewAdapter(mutableListOf(), object : OnListInteractionListener {
+            override fun onListInteraction(item: MovieResult?) {
+                if (item != null) openLink(item.posterPath)
+            }
+        })
+        moviesList.adapter = mAdapter
+
         return view
     }
 
@@ -53,11 +58,15 @@ class ItemsFragment : BaseMVPFragment<ItemsView, ItemsPresenter>(), ItemsView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        btn_pop.setOnClickListener{ getPresenter().getPopular() }
+        btn_top.setOnClickListener{ getPresenter().getTopRated() }
+        btn_upcoming.setOnClickListener { getPresenter().getUpcoming() }
+
         if (savedInstanceState != null) {
             val previousItems = getPresenter().getCache()
             mAdapter.setItemsList(previousItems.toMutableList())
         } else {
-            getPresenter().searchRepos("android") //TODO remove param
+            getPresenter().getPopular()
         }
     }
 
