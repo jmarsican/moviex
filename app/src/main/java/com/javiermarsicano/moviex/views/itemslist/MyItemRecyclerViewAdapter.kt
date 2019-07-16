@@ -83,7 +83,7 @@ class MyItemRecyclerViewAdapter(
         val item = mValues[position]
         holder.mName.text = item.title
         holder.mDescription.text = item.overview
-        holder.mComments.text = mContext.getString(R.string.comments_indicator, item.voteCount)
+        holder.mComments.text = mContext.resources.getQuantityString(R.plurals.comments_indicator, item.voteCount, item.voteCount)
         holder.mImage.setImageUrl(BASE_POSTER_URL+item.backdropPath,crossFade = true, error = R.mipmap.ic_launcher, placeholder = R.mipmap.ic_launcher_round)
         holder.mDate.text = item.releaseDate
 

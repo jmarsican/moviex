@@ -3,5 +3,14 @@
     <string name="generic_error">Some error occurred</string>
 
     <string name="dismiss">Dismiss All</string>
-    <string name="comments_indicator">%1$d votes</string>
+
+    <string name="popular">Popular</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="top_rated">Top Rated</string>
+
+    <plurals name="comments_indicator">
+        <item quantity="one">$d votes</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+
 </resources>
