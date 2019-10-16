@@ -46,4 +46,5 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxKotlinVersion"
 
     implementation "com.android.support:support-v4:$rootProject.appCompatVersion"
+    testImplementation 'junit:junit:4.12'
 }
