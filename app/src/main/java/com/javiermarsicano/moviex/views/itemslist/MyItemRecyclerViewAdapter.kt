@@ -13,8 +13,6 @@ import com.javiermarsicano.moviex.common.extensions.BASE_POSTER_URL
 import com.javiermarsicano.moviex.common.extensions.setImageUrl
 import com.javiermarsicano.moviex.data.models.MovieResult
 
-
-import com.javiermarsicano.moviex.views.itemslist.ItemsFragment.OnListInteractionListener
 import kotlinx.android.synthetic.main.entry_item.view.entry_comments
 import kotlinx.android.synthetic.main.entry_item.view.entry_date
 import kotlinx.android.synthetic.main.entry_item.view.entry_description
@@ -24,7 +22,7 @@ import kotlinx.android.synthetic.main.entry_item.view.entry_title
 
 class MyItemRecyclerViewAdapter(
         private var mValues: MutableList<MovieResult> = mutableListOf(),
-        private val mListener: OnListInteractionListener?)
+        private val mListener: (MovieResult?)->Unit)
     : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -35,7 +33,7 @@ class MyItemRecyclerViewAdapter(
             val item = v.tag as MovieResult
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onListInteraction(item)
+            mListener(item)
         }
     }
 
@@ -67,7 +65,7 @@ class MyItemRecyclerViewAdapter(
     fun clear() {
         val count = itemCount
         mValues.clear()
-        notifyItemRangeRemoved(0, count);
+        notifyItemRangeRemoved(0, count)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -83,7 +81,7 @@ class MyItemRecyclerViewAdapter(
         val item = mValues[position]
         holder.mName.text = item.title
         holder.mDescription.text = item.overview
-        holder.mComments.text = mContext.resources.getQuantityString(R.plurals.comments_indicator, item.voteCount, item.voteCount)
+        holder.mComments.text = mContext.resources.getQuantityString(R.plurals.comments_indicator, item.voteCount ?: 0, item.voteCount)
         holder.mImage.setImageUrl(BASE_POSTER_URL+item.backdropPath,crossFade = true, error = R.mipmap.ic_launcher, placeholder = R.mipmap.ic_launcher_round)
         holder.mDate.text = item.releaseDate
 
@@ -95,7 +93,7 @@ class MyItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         val mName: TextView = mView.entry_title
         val mDescription: TextView = mView.entry_description
         val mComments: TextView = mView.entry_comments

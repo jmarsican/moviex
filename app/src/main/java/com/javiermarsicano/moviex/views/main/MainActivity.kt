@@ -8,14 +8,10 @@ import com.javiermarsicano.moviex.views.itemslist.ItemsFragment
 import kotlinx.android.synthetic.main.activity_main.loaderView
 import java.lang.ref.WeakReference
 
-class MainActivity : BaseMVPActivity<MainView, MainPresenter>(), MainView, ItemsFragment.OnListInteractionListener {
+class MainActivity : BaseMVPActivity<MainView, MainPresenter>(), MainView {
 
     //it would be better to use dependency injection of presenter
     override fun getPresenter() = MainPresenterImpl(WeakReference(this))
-
-    override fun onListInteraction(item: MovieResult?) {
-        //implement event when clicking one item on list
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +26,6 @@ class MainActivity : BaseMVPActivity<MainView, MainPresenter>(), MainView, Items
         }
 
         setLoaderView(loaderView)
-    }
-
-    override fun openLink(link: String) {
-        TODO("not implemented")
     }
 
 }

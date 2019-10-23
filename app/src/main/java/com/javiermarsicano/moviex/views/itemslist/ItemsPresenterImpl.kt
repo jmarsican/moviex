@@ -31,33 +31,28 @@ class ItemsPresenterImpl @Inject constructor(
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( {
-                        viewReference.get()?.hideLoading()
-                        viewReference.get()?.showSearchResult(it)
-                    }, {
-                        viewReference.get()?.hideLoading()
-                        viewReference.get()?.onError(it.localizedMessage)
-                    }
-
-                )
+                .subscribe({
+                    viewReference.get()?.hideLoading()
+                    viewReference.get()?.showSearchResult(it)
+                }, {
+                    viewReference.get()?.hideLoading()
+                    viewReference.get()?.onError(it.localizedMessage)
+                })
                 .bindToLifecycle()
     }
 
     fun getVideo(movie: MovieResult) {
-        viewReference.get()?.showLoading()
-
         dataRepository.getVideo(movie.id.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( {
+                .map { it[0] }
+                .subscribe({
                     viewReference.get()?.hideLoading()
-                    viewReference.get()?.openLink(VIDEOS_URL + it[0].key)
+                    viewReference.get()?.openLink(VIDEOS_URL + it.key)
                 }, {
                     viewReference.get()?.hideLoading()
                     viewReference.get()?.onError(it.localizedMessage)
-                }
-
-                )
+                })
                 .bindToLifecycle()
     }
 
