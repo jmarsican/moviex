@@ -3,15 +3,19 @@ package com.javiermarsicano.moviex.views
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.javiermarsicano.moviex.R
+import com.javiermarsicano.moviex.databinding.ActivityMainBinding
 
 class MainActivity : FragmentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Add list fragment if this is first creation
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, MainScreenFragment.newInstance())
+            .commitNow()
     }
 
 }
