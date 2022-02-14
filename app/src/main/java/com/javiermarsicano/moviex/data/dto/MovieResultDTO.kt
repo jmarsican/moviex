@@ -2,7 +2,7 @@ package com.javiermarsicano.moviex.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieResult(
+data class MovieResultDTO(
     val id: Int,
     @SerializedName("backdrop_path")
     val backdropPath: String?,

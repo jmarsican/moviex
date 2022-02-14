@@ -12,7 +12,11 @@ const val API_VERSION = 3
 interface ServiceApi {
 
     @GET("/$API_VERSION/movie/top_rated")
-    fun getTopRated(apiKey: String, language: String, page: Int): Single<MovieResponse>
+    fun getTopRated(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Single<MovieResponse>
 
     @GET("/$API_VERSION/movie/{movie_id}/videos")
     fun getVideos(
