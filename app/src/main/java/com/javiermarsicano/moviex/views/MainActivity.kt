@@ -1,7 +1,7 @@
-package com.javiermarsicano.moviex.views.main
+package com.javiermarsicano.moviex.views
 
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.javiermarsicano.moviex.R
 
 class MainActivity : FragmentActivity() {
