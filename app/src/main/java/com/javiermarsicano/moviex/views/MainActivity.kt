@@ -3,9 +3,10 @@ package com.javiermarsicano.moviex.views
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.javiermarsicano.moviex.R
+import com.javiermarsicano.moviex.base.BaseActivity
 import com.javiermarsicano.moviex.databinding.ActivityMainBinding
 
-class MainActivity : FragmentActivity() {
+class MainActivity : BaseActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
