@@ -1,12 +1,10 @@
-package com.javiermarsicano.moviex.views
+package com.javiermarsicano.moviex.screen.movies
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.base.BaseFragment
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
 

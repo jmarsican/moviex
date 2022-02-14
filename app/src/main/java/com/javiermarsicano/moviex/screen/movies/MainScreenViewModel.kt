@@ -1,4 +1,4 @@
-package com.javiermarsicano.moviex.views
+package com.javiermarsicano.moviex.screen.movies
 
 import androidx.lifecycle.ViewModel
 

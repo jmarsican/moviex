@@ -1,10 +1,10 @@
-package com.javiermarsicano.moviex.views
+package com.javiermarsicano.moviex.screen
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.base.BaseActivity
 import com.javiermarsicano.moviex.databinding.ActivityMainBinding
+import com.javiermarsicano.moviex.screen.movies.MainScreenFragment
 
 class MainActivity : BaseActivity() {
 
