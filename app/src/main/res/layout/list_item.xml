@@ -18,7 +18,7 @@
         android:layout_marginBottom="@dimen/entry_header_margin"
         style="@style/EntryTitle"
         tools:text="Hello World!"
-        app:layout_constraintStart_toEndOf="@id/entry_status"
+        app:layout_constraintStart_toEndOf="@id/entry_title"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
@@ -28,15 +28,7 @@
         android:layout_marginTop="@dimen/entry_header_margin"
         app:layout_constraintTop_toBottomOf="@id/entry_title"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:src="@mipmap/ic_launcher"/>
-
-    <ImageButton
-        android:id="@+id/entry_status"
-        android:layout_width="5dp"
-        android:layout_height="5dp"
-        android:layout_marginBottom="@dimen/entry_header_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:src="@mipmap/ic_launcher"/>
 
     <ImageView
         android:id="@+id/entry_go_btn"

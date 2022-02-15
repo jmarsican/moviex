@@ -15,6 +15,8 @@ class MainScreenFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val viewModel by activityViewModels<MainScreenViewModel>()
 
+    private val adapter: MoviesAdapter = MoviesAdapter(mutableListOf()) //TODO inject using DI
+
     companion object {
         fun newInstance() = MainScreenFragment()
     }
@@ -24,13 +26,15 @@ class MainScreenFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = MainScreenFragmentBinding.inflate(inflater, container, false)
+        binding.itemsList.adapter = adapter
+        binding.itemsList.setHasFixedSize(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.moviesObservable.observe(viewLifecycleOwner, {
-            Timber.d("Movies list received ${it[0]}")
+            adapter.updateList(it)
         })
         viewModel.getTopMovies()
     }
