@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.javiermarsicano.moviex.R
+import com.javiermarsicano.moviex.common.loadImageFromUrl
 import com.javiermarsicano.moviex.data.model.MovieResult
 import com.javiermarsicano.moviex.databinding.ListItemBinding
 
@@ -23,6 +25,12 @@ class MoviesAdapter(private val itemsList: MutableList<MovieResult>): RecyclerVi
                 entryComments.text = it.voteCount.toString()
                 entryDescription.text = it.overview
                 entryTitle.text = it.title
+                entryImage.loadImageFromUrl(
+                    it.posterPath,
+                    placeholder = R.drawable.ic_launcher_foreground,
+                    thumbnail = R.drawable.ic_launcher_foreground,
+                    crossFade = true
+                )
             }
         }
     }

@@ -3,6 +3,8 @@ package com.javiermarsicano.moviex.data
 import com.javiermarsicano.moviex.data.dto.MovieResultDTO
 import com.javiermarsicano.moviex.data.model.MovieResult
 
+const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/w92"
+
 fun MovieResultDTO.toModel(): MovieResult {
     return MovieResult(
         this.id,
@@ -11,7 +13,7 @@ fun MovieResultDTO.toModel(): MovieResult {
         this.originalTitle,
         this.overview,
         this.popularity,
-        this.posterPath,
+        BASE_POSTER_URL + this.posterPath,
         this.releaseDate,
         this.title,
         this.video,
