@@ -2,5 +2,14 @@
 <resources>
     <dimen name="loader_margin">8dp</dimen>
 
+    <dimen name="entry_header_margin">6dp</dimen>
+    <dimen name="entry_padding">3dp</dimen>
+    <dimen name="entry_title_size">11sp</dimen>
+
+    <dimen name="list_margin">16dp</dimen>
+
     <!--cards-->
+
+    <dimen name="elevation_small">2dp</dimen>
+    <dimen name="divider_separation">5dp</dimen>
 </resources>
