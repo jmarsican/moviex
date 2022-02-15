@@ -5,7 +5,9 @@ import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.base.BaseActivity
 import com.javiermarsicano.moviex.databinding.ActivityMainBinding
 import com.javiermarsicano.moviex.screen.movies.MainScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
 

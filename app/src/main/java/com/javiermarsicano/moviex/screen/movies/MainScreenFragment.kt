@@ -1,23 +1,23 @@
 package com.javiermarsicano.moviex.screen.movies
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.javiermarsicano.moviex.base.BaseFragment
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
+import timber.log.Timber
 
 class MainScreenFragment : BaseFragment() {
 
     private var _binding: MainScreenFragmentBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by activityViewModels<MainScreenViewModel>()
 
     companion object {
         fun newInstance() = MainScreenFragment()
     }
-
-    private lateinit var viewModel: MainScreenViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,10 +27,12 @@ class MainScreenFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainScreenViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.moviesObservable.observe(viewLifecycleOwner, {
+            Timber.d("Movies list received ${it[0]}")
+        })
+        viewModel.getTopMovies()
     }
 
     override fun onDestroyView() {
