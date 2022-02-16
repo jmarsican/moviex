@@ -1,7 +1,11 @@
 package com.javiermarsicano.moviex.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "movie_result")
 data class MovieResult (
-    val id: Int,
+    @PrimaryKey val id: Int,
     val backdropPath: String?,
     val originalLanguage: String?,
     val originalTitle: String?,
