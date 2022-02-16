@@ -4,12 +4,13 @@ import android.content.Context
 import android.net.Uri
 import com.javiermarsicano.moviex.BuildConfig
 import com.javiermarsicano.moviex.data.model.MovieResult
-import com.javiermarsicano.moviex.data.network.BaseRemoteRepository
 import com.javiermarsicano.moviex.data.network.ServiceApi
 import io.reactivex.Single
 import java.util.*
 
-class MovieRepositoryImpl(context: Context, url: String): MovieRepository, BaseRemoteRepository(context, Uri.parse(url)) {
+class MovieRepositoryImpl(context: Context, url: String):
+    MovieRepository,
+    BaseRemoteRepository(context, Uri.parse(url)) {
 
     private val serviceApi = retrofit.create(ServiceApi::class.java)
 
@@ -20,5 +21,7 @@ class MovieRepositoryImpl(context: Context, url: String): MovieRepository, BaseR
                     dto.toModel()
                 }
             }
+            .flatMap {  db.getMoviesDao().saveTopMovies(it).toSingleDefault(it) }
+            .onErrorResumeNext {  db.getMoviesDao().getTopMovies() }
     }
 }

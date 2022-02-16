@@ -1,9 +1,11 @@
-package com.javiermarsicano.moviex.data.network
+package com.javiermarsicano.moviex.data
 
 import android.content.Context
 import android.net.Uri
+import androidx.room.Room
 import com.google.gson.GsonBuilder
 import com.javiermarsicano.moviex.BuildConfig
+import com.javiermarsicano.moviex.data.db.MoviesDatabase
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +20,8 @@ private const val CACHE_SIZE = 10 * 1024 * 1024
 
 abstract class BaseRemoteRepository(context: Context, baseUrl: Uri) {
     protected val retrofit: Retrofit
+    val db = Room.databaseBuilder(context, MoviesDatabase::class.java, "movies-database")
+        .build() //TODO Refactor
 
     init {
         val loggingInterceptor = HttpLoggingInterceptor { Timber.d(it) }
