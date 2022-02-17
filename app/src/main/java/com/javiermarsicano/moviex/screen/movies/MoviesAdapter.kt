@@ -3,6 +3,7 @@ package com.javiermarsicano.moviex.screen.movies
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.common.loadImageFromUrl
@@ -21,16 +22,20 @@ class MoviesAdapter(private val itemsList: MutableList<MovieResult>): RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
-            itemsList[position].let {
-                entryComments.text = it.voteCount.toString()
-                entryDescription.text = it.overview
-                entryTitle.text = it.title
+            itemsList[position].let { movieResult ->
+                entryComments.text = movieResult.voteCount.toString()
+                entryDescription.text = movieResult.overview
+                entryTitle.text = movieResult.title
                 entryImage.loadImageFromUrl(
-                    it.posterPath,
+                    movieResult.posterPath,
                     placeholder = R.drawable.ic_launcher_foreground,
                     thumbnail = R.drawable.ic_launcher_foreground,
                     crossFade = true
                 )
+                root.setOnClickListener {
+                    val action = MainScreenFragmentDirections.actionMoviesListFragmentToDetailsFragment(movieResult.id)
+                    it.findNavController().navigate(action)
+                }
             }
         }
     }
