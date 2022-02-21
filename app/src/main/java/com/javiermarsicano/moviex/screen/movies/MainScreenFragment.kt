@@ -1,11 +1,14 @@
 package com.javiermarsicano.moviex.screen.movies
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.javiermarsicano.moviex.base.BaseFragment
+import com.javiermarsicano.moviex.data.Resource
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
 import timber.log.Timber
 
@@ -34,7 +37,20 @@ class MainScreenFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.moviesObservable.observe(viewLifecycleOwner, {
-            adapter.updateList(it)
+            when (it) {
+                is Resource.Success -> {
+                    binding.progressLoading.isVisible = false
+                    adapter.updateList(it.data)
+                }
+                is Resource.Error -> {
+                    binding.progressLoading.isVisible = false
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Error")
+                        .setMessage(it.e.localizedMessage)
+                        .show()
+                }
+                is Resource.Loading -> binding.progressLoading.isVisible = true
+            }
         })
         viewModel.getTopMovies()
     }
