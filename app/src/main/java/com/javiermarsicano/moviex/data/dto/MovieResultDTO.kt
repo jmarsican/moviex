@@ -1,6 +1,7 @@
 package com.javiermarsicano.moviex.data.dto
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class MovieResultDTO(
     val id: Int,
@@ -15,7 +16,7 @@ data class MovieResultDTO(
     @SerializedName("poster_path")
     val posterPath: String?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    val releaseDate: Date?,
     val title: String?,
     val video: Boolean?,
     @SerializedName("vote_average")

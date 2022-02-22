@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit
 
 private const val CACHE_SIZE = 10 * 1024 * 1024
 
+internal const val API_DATE_PATTERN = "yyyy-MM-dd"
+
 abstract class BaseRemoteRepository(context: Context, baseUrl: Uri) {
     protected val retrofit: Retrofit
     val db = Room.databaseBuilder(context, MoviesDatabase::class.java, "movies-database")
@@ -43,9 +45,12 @@ abstract class BaseRemoteRepository(context: Context, baseUrl: Uri) {
                 )
             )
 
+        val gsonBuilder = GsonBuilder()
+            .setDateFormat(API_DATE_PATTERN)
+
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl.toString())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(clientBuilder.build())
             .build()
