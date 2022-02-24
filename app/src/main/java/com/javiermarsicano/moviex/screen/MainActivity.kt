@@ -1,6 +1,7 @@
 package com.javiermarsicano.moviex.screen
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,7 +23,22 @@ class MainActivity : BaseActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.movies_host_fragment) as NavHostFragment
         val appBarConfig = AppBarConfiguration(navHostFragment.navController.graph)
+
+        binding.toolbar.inflateMenu(R.menu.items_menu)
         binding.toolbar.setupWithNavController(navHostFragment.navController, appBarConfig)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_settings -> {
+                    Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.action_logout -> {
+                    Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
 }
