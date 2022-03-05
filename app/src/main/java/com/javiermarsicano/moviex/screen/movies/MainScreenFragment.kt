@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import com.javiermarsicano.moviex.base.BaseFragment
 import com.javiermarsicano.moviex.data.Resource
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
-import timber.log.Timber
 
 class MainScreenFragment : BaseFragment() {
 
@@ -18,7 +17,7 @@ class MainScreenFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val viewModel by activityViewModels<MainScreenViewModel>()
 
-    private val adapter: MoviesAdapter = MoviesAdapter(mutableListOf()) //TODO inject using DI
+    private val adapter: MoviesAdapter = MoviesAdapter() //TODO inject using DI
 
     companion object {
         fun newInstance() = MainScreenFragment()
@@ -30,7 +29,6 @@ class MainScreenFragment : BaseFragment() {
     ): View {
         _binding = MainScreenFragmentBinding.inflate(inflater, container, false)
         binding.itemsList.adapter = adapter
-        binding.itemsList.setHasFixedSize(true)
         return binding.root
     }
 
@@ -40,7 +38,7 @@ class MainScreenFragment : BaseFragment() {
             when (it) {
                 is Resource.Success -> {
                     binding.progressLoading.isVisible = false
-                    adapter.updateList(it.data)
+                    adapter.submitList(it.data)
                 }
                 is Resource.Error -> {
                     binding.progressLoading.isVisible = false
