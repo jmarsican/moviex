@@ -16,12 +16,12 @@ class MovieRepositoryImpl(context: Context, url: String):
 
     override fun getTopRated(): Single<List<MovieResult>> {
         return serviceApi.getTopRated(BuildConfig.API_KEY, Locale.getDefault().toString(), 1)
+            .flatMap {  db.getMoviesDao().saveTopMovies(it.results).toSingleDefault(it) }
             .map {
                 it.results.map { dto ->
                     dto.toModel()
                 }
             }
-            .flatMap {  db.getMoviesDao().saveTopMovies(it).toSingleDefault(it) }
-            .onErrorResumeNext {  db.getMoviesDao().getTopMovies() }
+            .onErrorResumeNext { db.getMoviesDao().getTopMovies().map { it.map { dto -> dto.toModel() } } }
     }
 }

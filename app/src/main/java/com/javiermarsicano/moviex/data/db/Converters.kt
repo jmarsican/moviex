@@ -1,4 +1,4 @@
-package com.javiermarsicano.moviex.data
+package com.javiermarsicano.moviex.data.db
 
 import androidx.room.TypeConverter
 import java.text.SimpleDateFormat

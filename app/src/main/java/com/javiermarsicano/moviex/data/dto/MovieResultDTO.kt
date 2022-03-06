@@ -1,10 +1,13 @@
 package com.javiermarsicano.moviex.data.dto
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
+@Entity(tableName = "movie_result") //TODO create Entity data class
 data class MovieResultDTO(
-    val id: Int,
+    @PrimaryKey  val id: Int,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("original_language")
