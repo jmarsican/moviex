@@ -3,11 +3,16 @@ package com.javiermarsicano.moviex.screen.movies
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.javiermarsicano.moviex.ImmediateSchedulerRule
+import com.javiermarsicano.moviex.data.Resource
 import com.javiermarsicano.moviex.data.model.MovieResult
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import junit.framework.Assert.assertEquals
+import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,7 +40,9 @@ class MainScreenVMTests {
     @Mock
     private lateinit var getTopMoviesUseCaseMock: GetTopMoviesUseCase
     @Captor
-    private lateinit var argumentCaptor: ArgumentCaptor<List<MovieResult>>
+    private lateinit var argumentCaptor: ArgumentCaptor<Resource<List<MovieResult>>>
+    @Mock
+    private lateinit var liveDataObserver: Observer<Resource<List<MovieResult>>>
 
     @Before
     fun setUp() {
@@ -50,8 +57,7 @@ class MainScreenVMTests {
 
     @Test
     fun `test get top movies successful`() {
-        val liveDataObserver = mock(Observer::class.java)
-        sut.moviesObservable.observeForever(liveDataObserver as Observer<in List<MovieResult>>)
+        sut.moviesObservable.observeForever(liveDataObserver)
         val movieResult = MovieResult(
             0,
             null,
@@ -60,7 +66,7 @@ class MainScreenVMTests {
             null,
             null,
             "",
-            "",
+            null,
             "",
             false,
             null,
@@ -71,8 +77,9 @@ class MainScreenVMTests {
 
         sut.getTopMovies()
 
-        verify(getTopMoviesUseCaseMock, times(1)).execute()
-        verify(liveDataObserver).onChanged(argumentCaptor.capture())
-        assertEquals(movieResult, argumentCaptor.allValues[0].first())
+        verify(getTopMoviesUseCaseMock).execute()
+        verify(liveDataObserver, times(2)).onChanged(argumentCaptor.capture())
+        assertThat(argumentCaptor.allValues.first(), instanceOf(Resource.Loading::class.java))
+        assertEquals(movieResult, (argumentCaptor.allValues.last() as Resource.Success).data.first())
     }
 }
