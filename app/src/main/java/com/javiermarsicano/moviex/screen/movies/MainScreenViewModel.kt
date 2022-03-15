@@ -25,7 +25,6 @@ class MainScreenViewModel @Inject constructor(
         disposable.dispose()
         moviesLiveData.value = Resource.Loading()
         getTopMoviesUseCase.execute()
-            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 moviesLiveData.value = Resource.Success(it)
