@@ -22,6 +22,8 @@ class MovieRepositoryImpl(
                     dto.toModel()
                 }
             }
-            .onErrorResumeNext { moviesDao.getTopMovies().map { it.map { dto -> dto.toModel() } } }
+            .onErrorResumeNext {
+                moviesDao.getTopMovies().map { it.map { dto -> dto.toModel() } }
+            }
     }
 }
