@@ -90,5 +90,5 @@ class MainModule {
     @Singleton
     @Provides
     fun provideGetMoviesInteractor(repo: MovieRepository): GetTopMoviesUseCase =
-        GetTopMoviesUseCase(repo, Schedulers.io())
+        GetTopMoviesUseCase(repo)
 }

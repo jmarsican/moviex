@@ -6,7 +6,7 @@ import com.javiermarsicano.moviex.base.BaseReactiveViewModel
 import com.javiermarsicano.moviex.common.Event
 import com.javiermarsicano.moviex.common.StatusViewState
 import com.javiermarsicano.moviex.common.doOnSuccess
-import com.javiermarsicano.moviex.data.Resource
+import com.javiermarsicano.moviex.common.toViewState
 import com.javiermarsicano.moviex.data.model.MovieResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,17 +30,13 @@ class MainScreenViewModel @Inject constructor(
 
     fun getTopMovies() {
         topMoviesDisposable.dispose()
-        getTopMoviesUseCase.execute()
+        getTopMoviesUseCase.invoke(Unit)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess {
                 moviesLiveData.value = it
             }
             .subscribe({ resource ->
-                status.value = when (resource) {
-                    is Resource.Loading -> Event(StatusViewState.Loading)
-                    is Resource.Success -> Event(StatusViewState.Content)
-                    is Resource.Error -> Event(StatusViewState.Error(resource.e))
-                }
+                status.value = resource.toViewState()
             },{
                 status.value = Event(StatusViewState.Error(it))
             })
