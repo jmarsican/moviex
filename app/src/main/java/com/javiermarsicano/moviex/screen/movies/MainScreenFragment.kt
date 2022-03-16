@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.javiermarsicano.moviex.base.BaseFragment
-import com.javiermarsicano.moviex.data.Resource
+import com.javiermarsicano.moviex.common.EventObserver
+import com.javiermarsicano.moviex.common.StatusViewState
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
 
 class MainScreenFragment : BaseFragment() {
@@ -34,23 +35,25 @@ class MainScreenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.moviesObservable.observe(viewLifecycleOwner, {
+        viewModel.statusObservable.observe(viewLifecycleOwner, EventObserver {
             when (it) {
-                is Resource.Success -> {
-                    binding.progressLoading.isVisible = false
-                    adapter.submitList(it.data)
-                }
-                is Resource.Error -> {
+                is StatusViewState.Loading -> binding.progressLoading.isVisible = true
+                is StatusViewState.Content -> binding.progressLoading.isVisible = false
+                is StatusViewState.Error -> {
                     binding.progressLoading.isVisible = false
                     AlertDialog.Builder(requireContext())
                         .setTitle("Error")
-                        .setMessage(it.e.localizedMessage)
+                        .setMessage(it.exception.localizedMessage)
                         .show()
                 }
-                is Resource.Loading -> binding.progressLoading.isVisible = true
             }
         })
-        viewModel.getTopMovies()
+        viewModel.moviesObservable.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
+        if (savedInstanceState == null) {
+            viewModel.getTopMovies()
+        }
     }
 
     override fun onDestroyView() {

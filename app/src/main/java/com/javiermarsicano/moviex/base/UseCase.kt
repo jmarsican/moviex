@@ -1,7 +1,7 @@
 package com.javiermarsicano.moviex.base
 
-import io.reactivex.Single
+import io.reactivex.Observable
 
 interface UseCase<R> {
-    fun execute(): Single<R>
+    fun execute(): Observable<R>
 }
