@@ -28,9 +28,9 @@ class MainScreenViewModel @Inject constructor(
 
     private var topMoviesDisposable: Disposable = Disposables.disposed()
 
-    fun getTopMovies() {
+    fun getTopMovies(page: Int) {
         topMoviesDisposable.dispose()
-        getTopMoviesUseCase.invoke(Unit)
+        getTopMoviesUseCase.invoke(page)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess {
                 moviesLiveData.value = it

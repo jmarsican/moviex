@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.javiermarsicano.moviex.R
 import com.javiermarsicano.moviex.common.loadImageFromUrl
 import com.javiermarsicano.moviex.data.model.MovieResult
 import com.javiermarsicano.moviex.databinding.ListItemBinding
 
-class MoviesAdapter: ListAdapter<MovieResult, MoviesAdapter.ViewHolder>(DiffMovieCallback) {
+class MoviesAdapter(private val itemsList: MutableList<MovieResult>): RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,7 +19,7 @@ class MoviesAdapter: ListAdapter<MovieResult, MoviesAdapter.ViewHolder>(DiffMovi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
-            getItem(position).let { movieResult ->
+            itemsList[position].let { movieResult ->
                 entryComments.text = movieResult.voteCount.toString()
                 entryDescription.text = movieResult.overview
                 entryTitle.text = movieResult.title
@@ -37,6 +36,18 @@ class MoviesAdapter: ListAdapter<MovieResult, MoviesAdapter.ViewHolder>(DiffMovi
             }
         }
     }
+
+    fun addItems(newItems: List<MovieResult>) {
+        val previousSize = itemsList.size
+        itemsList.addAll(newItems)
+        notifyItemRangeInserted(previousSize, newItems.size)
+    }
+
+    fun reset() { //To call when want to refresh for example onSwipe
+        itemsList.clear()
+    }
+
+    override fun getItemCount(): Int = itemsList.size
 
     class ViewHolder(val binding: ListItemBinding): RecyclerView.ViewHolder(binding.root)
 }

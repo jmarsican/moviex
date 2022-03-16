@@ -28,6 +28,7 @@
         android:layout_marginTop="@dimen/entry_header_margin"
         app:layout_constraintTop_toBottomOf="@id/entry_title"
         app:layout_constraintLeft_toLeftOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic"
         android:src="@mipmap/ic_launcher"/>
 
     <ImageView

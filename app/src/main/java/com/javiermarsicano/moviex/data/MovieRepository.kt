@@ -5,6 +5,6 @@ import io.reactivex.Single
 
 interface MovieRepository {
 
-    fun getTopRated(): Single<List<MovieResult>>
+    fun getTopRated(page: Int): Single<List<MovieResult>>
 
 }

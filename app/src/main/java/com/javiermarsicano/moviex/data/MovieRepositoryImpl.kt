@@ -14,8 +14,8 @@ class MovieRepositoryImpl(
     private val moviesDao: MovieDao,
 ): MovieRepository {
 
-    override fun getTopRated(): Single<List<MovieResult>> {
-        return serviceApi.getTopRated(BuildConfig.API_KEY, Locale.getDefault().toString(), 1)
+    override fun getTopRated(page: Int): Single<List<MovieResult>> {
+        return serviceApi.getTopRated(BuildConfig.API_KEY, Locale.getDefault().toString(), page)
             .flatMap {  moviesDao.saveTopMovies(it.results).toSingleDefault(it) }
             .map {
                 it.results.map { dto ->

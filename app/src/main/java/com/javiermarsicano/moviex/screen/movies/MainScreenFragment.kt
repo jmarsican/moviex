@@ -1,16 +1,19 @@
 package com.javiermarsicano.moviex.screen.movies
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.javiermarsicano.moviex.base.BaseFragment
+import com.javiermarsicano.moviex.common.EndlessScrollListener
 import com.javiermarsicano.moviex.common.EventObserver
 import com.javiermarsicano.moviex.common.StatusViewState
 import com.javiermarsicano.moviex.databinding.MainScreenFragmentBinding
+
+private const val FIRST_PAGE = 1
 
 class MainScreenFragment : BaseFragment() {
 
@@ -18,7 +21,7 @@ class MainScreenFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val viewModel by activityViewModels<MainScreenViewModel>()
 
-    private val adapter: MoviesAdapter = MoviesAdapter() //TODO inject using DI
+    private val moviesAdapter: MoviesAdapter = MoviesAdapter(mutableListOf()) //TODO inject using DI
 
     companion object {
         fun newInstance() = MainScreenFragment()
@@ -29,7 +32,16 @@ class MainScreenFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = MainScreenFragmentBinding.inflate(inflater, container, false)
-        binding.itemsList.adapter = adapter
+        binding.itemsList.apply {
+            adapter = moviesAdapter
+            val linearLayoutManager = LinearLayoutManager(requireContext())
+            layoutManager = linearLayoutManager
+            addOnScrollListener(object : EndlessScrollListener(linearLayoutManager, FIRST_PAGE){
+                override fun onLoadMore(page: Int) {
+                    viewModel.getTopMovies(page)
+                }
+            })
+        }
         return binding.root
     }
 
@@ -46,10 +58,10 @@ class MainScreenFragment : BaseFragment() {
             }
         })
         viewModel.moviesObservable.observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+            moviesAdapter.addItems(it)
         })
         if (savedInstanceState == null) {
-            viewModel.getTopMovies()
+            viewModel.getTopMovies(FIRST_PAGE)
         }
     }
 

@@ -18,6 +18,6 @@ A sample app for building android applications based on MVVM using RxJava with m
 - Navigation
 ### TODO
 - [ ] Migrate to coroutines
-- [ ] Pagination
+- [x] Pagination
 - [x] Base ViewModel, Base Fragment, Base Activity
 - [ ] Move domain classes to Kotlin module
