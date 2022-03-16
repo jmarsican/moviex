@@ -41,10 +41,7 @@ class MainScreenFragment : BaseFragment() {
                 is StatusViewState.Content -> binding.progressLoading.isVisible = false
                 is StatusViewState.Error -> {
                     binding.progressLoading.isVisible = false
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Error")
-                        .setMessage(it.exception.localizedMessage)
-                        .show()
+                    showErrorMessage(it.exception.localizedMessage.orEmpty())
                 }
             }
         })

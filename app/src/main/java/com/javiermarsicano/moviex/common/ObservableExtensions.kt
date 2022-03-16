@@ -2,8 +2,6 @@ package com.javiermarsicano.moviex.common
 
 import com.javiermarsicano.moviex.data.Resource
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 fun <T> Observable<T>.asyncResource(): Observable<Resource<T>> =
@@ -23,8 +21,4 @@ fun <T> Observable<Resource<T>>.doOnSuccess(
         }
     }
 
-}
-
-operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
-    add(disposable)
 }
