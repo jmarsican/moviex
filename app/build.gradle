@@ -49,10 +49,7 @@ dependencies {
     //logger
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
 
-    //rxjava
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxKotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
@@ -63,12 +60,11 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
 
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
-    implementation 'androidx.room:room-rxjava2:2.4.0'
+    implementation 'androidx.room:room-ktx:2.4.0'
     implementation "androidx.room:room-runtime:2.4.0"
     kapt "androidx.room:room-compiler:2.4.0"
 

@@ -2,17 +2,16 @@ package com.javiermarsicano.moviex.screen.movies
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.javiermarsicano.moviex.base.BaseReactiveViewModel
 import com.javiermarsicano.moviex.common.Event
 import com.javiermarsicano.moviex.common.StatusViewState
-import com.javiermarsicano.moviex.common.doOnSuccess
-import com.javiermarsicano.moviex.common.toViewState
+import com.javiermarsicano.moviex.data.Resource
 import com.javiermarsicano.moviex.data.model.MovieResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.rxkotlin.plusAssign
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,20 +25,21 @@ class MainScreenViewModel @Inject constructor(
     private val status = MutableLiveData<Event<StatusViewState>>()
     val statusObservable: LiveData<Event<StatusViewState>> get() = status
 
-    private var topMoviesDisposable: Disposable = Disposables.disposed()
+    private var job: Job? = null
 
     fun getTopMovies(page: Int) {
-        topMoviesDisposable.dispose()
-        getTopMoviesUseCase.invoke(page)
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess {
-                moviesLiveData.value = it
+        job?.cancel()
+        status.value = Event(StatusViewState.Loading)
+        job = viewModelScope.launch() {
+            getTopMoviesUseCase.invoke(page).let { result ->
+                if (result is Resource.Success) {
+                    status.value = Event(StatusViewState.Content)
+                    result.data.let {  moviesLiveData.value = it }
+                } else if (result is Resource.Error) {
+                    status.value = Event(StatusViewState.Error(result.e))
+                }
             }
-            .subscribe({ resource ->
-                status.value = resource.toViewState()
-            },{
-                status.value = Event(StatusViewState.Error(it))
-            })
-            .also { disposables += it }
+        }
     }
+
 }

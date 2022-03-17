@@ -1,10 +1,10 @@
 package com.javiermarsicano.moviex.base
 
 import com.javiermarsicano.moviex.data.Resource
-import io.reactivex.Observable
-import io.reactivex.Scheduler
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-abstract class UseCase<in P, R>(private val scheduler: Scheduler) {
+abstract class UseCase<in P, R>(private val dispatcher: CoroutineDispatcher) {
 
     /** Executes the use case asynchronously and returns a [Resource].
      *
@@ -12,18 +12,19 @@ abstract class UseCase<in P, R>(private val scheduler: Scheduler) {
      *
      * @param parameters the input parameters to run the use case with
      */
-    fun invoke(parameters: P): Observable<Resource<R>> {
-        return execute(parameters)
-            .map<Resource<R>> { //better to use asyncResource() extension
-                Resource.Success(it)
+    suspend fun invoke(parameters: P): Resource<R> {
+        return try {
+            withContext(dispatcher) {
+                execute(parameters).let { Resource.Success(it) }
             }
-            .startWith(Resource.Loading())
-            .onErrorReturn { Resource.Error(it) }
-            .subscribeOn(scheduler)
+        } catch (e: Throwable) {
+            Resource.Error(e)
+        }
     }
 
     /**
      * Override this to set the code to be executed.
      */
-    protected abstract fun execute(parameters: P): Observable<R>
+    @Throws(RuntimeException::class)
+    protected abstract suspend fun execute(parameters: P): R
 }
