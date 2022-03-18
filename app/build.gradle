@@ -4,6 +4,9 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -18,11 +21,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "API_BASE_URL", '"https://api.themoviedb.org/"')
-            buildConfigField("String", "API_KEY", '"13c5955def4848143ee749a3a98b1f0e"')
+            buildConfigField "String", "API_KEY", "\"" + localProperties['app.key'] + "\""
         }
         debug {
             buildConfigField("String", "API_BASE_URL", '"https://api.themoviedb.org/"')
-            buildConfigField("String", "API_KEY", '"13c5955def4848143ee749a3a98b1f0e"')
+            buildConfigField "String", "API_KEY", "\"" + localProperties['app.key'] + "\""
         }
     }
     compileOptions {
