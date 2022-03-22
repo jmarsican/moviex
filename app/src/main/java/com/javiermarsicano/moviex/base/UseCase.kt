@@ -2,9 +2,12 @@ package com.javiermarsicano.moviex.base
 
 import com.javiermarsicano.moviex.data.Resource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-abstract class UseCase<in P, R>(private val dispatcher: CoroutineDispatcher) {
+abstract class UseCase<in P, R>() {
 
     /** Executes the use case asynchronously and returns a [Resource].
      *
@@ -12,19 +15,14 @@ abstract class UseCase<in P, R>(private val dispatcher: CoroutineDispatcher) {
      *
      * @param parameters the input parameters to run the use case with
      */
-    suspend fun invoke(parameters: P): Resource<R> {
-        return try {
-            withContext(dispatcher) {
-                execute(parameters).let { Resource.Success(it) }
-            }
-        } catch (e: Throwable) {
-            Resource.Error(e)
-        }
-    }
+    fun invoke(parameters: P): Flow<Resource<R>> = execute(parameters)
+            .map { Resource.Success(it) }
+            .catch { Resource.Error(it) }
+
 
     /**
      * Override this to set the code to be executed.
      */
     @Throws(RuntimeException::class)
-    protected abstract suspend fun execute(parameters: P): R
+    protected abstract fun execute(parameters: P): Flow<R>
 }

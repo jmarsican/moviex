@@ -5,12 +5,12 @@ import com.javiermarsicano.moviex.data.MovieRepository
 import com.javiermarsicano.moviex.data.model.MovieResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 class GetTopMoviesUseCase (
     private val repository: MovieRepository,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
-): UseCase<Int, List<MovieResult>>(dispatcher) {
-    override suspend fun execute(parameters: Int): List<MovieResult> {
+): UseCase<Int, List<MovieResult>>() {
+    override fun execute(parameters: Int): Flow<List<MovieResult>> {
         return repository.getTopRated(parameters)
     }
 }

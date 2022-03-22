@@ -4,6 +4,10 @@ import com.javiermarsicano.moviex.BuildConfig
 import com.javiermarsicano.moviex.data.db.MovieDao
 import com.javiermarsicano.moviex.data.model.MovieResult
 import com.javiermarsicano.moviex.data.network.ServiceApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import java.io.IOException
 import java.util.*
 
@@ -12,17 +16,17 @@ class MovieRepositoryImpl(
     private val moviesDao: MovieDao,
 ): MovieRepository {
 
-    override suspend fun getTopRated(page: Int): List<MovieResult> {
-        return try {
+    override fun getTopRated(page: Int): Flow<List<MovieResult>> {
+        return flow {
             val result = serviceApi.getTopRated(BuildConfig.API_KEY, Locale.getDefault().toString(), page)
             moviesDao.saveTopMovies(result.results)
-            result.results.map { dto ->
-                dto.toModel()
-            }
-        } catch (e: IOException) {
-            val result = moviesDao.getTopMovies().map { dto -> dto.toModel() }
+            emit(result.results)
+        }.catch {
+            val result = moviesDao.getTopMovies()
             if (result.isEmpty()) throw DataNotAvailableException("Could not retrieve data from local repository")
-            result
+            emit(result)
+        }.map {
+            it.map { dto-> dto.toModel() }
         }
     }
 }

@@ -1,9 +1,10 @@
 package com.javiermarsicano.moviex.data
 
 import com.javiermarsicano.moviex.data.model.MovieResult
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    suspend fun getTopRated(page: Int): List<MovieResult>
+    fun getTopRated(page: Int): Flow<List<MovieResult>>
 
 }

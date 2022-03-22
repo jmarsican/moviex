@@ -11,6 +11,7 @@ import com.javiermarsicano.moviex.data.Resource
 import com.javiermarsicano.moviex.data.model.MovieResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +31,8 @@ class MainScreenViewModel @Inject constructor(
     fun getTopMovies(page: Int) {
         job?.cancel()
         status.value = Event(StatusViewState.Loading)
-        job = viewModelScope.launch() {
-            getTopMoviesUseCase.invoke(page).let { result ->
+        job = viewModelScope.launch {
+            getTopMoviesUseCase.invoke(page).collect { result ->
                 if (result is Resource.Success) {
                     status.value = Event(StatusViewState.Content)
                     result.data.let {  moviesLiveData.value = it }
