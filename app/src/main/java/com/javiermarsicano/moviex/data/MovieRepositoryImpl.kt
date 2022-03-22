@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import java.io.IOException
 import java.util.*
 
@@ -19,8 +20,9 @@ class MovieRepositoryImpl(
     override fun getTopRated(page: Int): Flow<List<MovieResult>> {
         return flow {
             val result = serviceApi.getTopRated(BuildConfig.API_KEY, Locale.getDefault().toString(), page)
-            moviesDao.saveTopMovies(result.results)
             emit(result.results)
+        }.onEach {
+            moviesDao.saveTopMovies(it)
         }.catch {
             val result = moviesDao.getTopMovies()
             if (result.isEmpty()) throw DataNotAvailableException("Could not retrieve data from local repository")

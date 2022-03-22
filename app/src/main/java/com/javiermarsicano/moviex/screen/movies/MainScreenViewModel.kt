@@ -30,14 +30,19 @@ class MainScreenViewModel @Inject constructor(
 
     fun getTopMovies(page: Int) {
         job?.cancel()
-        status.value = Event(StatusViewState.Loading)
         job = viewModelScope.launch {
             getTopMoviesUseCase.invoke(page).collect { result ->
-                if (result is Resource.Success) {
-                    status.value = Event(StatusViewState.Content)
-                    result.data.let {  moviesLiveData.value = it }
-                } else if (result is Resource.Error) {
-                    status.value = Event(StatusViewState.Error(result.e))
+                when (result) {
+                    is Resource.Success -> {
+                        status.value = Event(StatusViewState.Content)
+                        result.data.let {  moviesLiveData.value = it }
+                    }
+                    is Resource.Error -> {
+                        status.value = Event(StatusViewState.Error(result.e))
+                    }
+                    is Resource.Loading -> {
+                        status.value = Event(StatusViewState.Loading)
+                    }
                 }
             }
         }
